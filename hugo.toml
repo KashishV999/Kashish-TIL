@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://serene-llama-209254.netlify.app/'
 locale = 'en-us'
 title = 'Kashish TIL'
 theme = 'ananke'
