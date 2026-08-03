@@ -2,6 +2,8 @@
 title = 'TIL #1 : Model Context Protocol (MCP) and Agents'
 date = 2026-08-03T07:07:07+01:00
 draft = false
+show_reading_time = true
+omit_header_text = true
 +++
 
 This is my first post in my "Today I Learned" series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it. 
