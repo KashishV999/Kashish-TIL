@@ -88,8 +88,8 @@ It has access to tools , make autonomous decisions, without a human manually dri
 Agent uses **ReAct** pattern:
 Instead of directly finally producing the answer instead:
 1. Reason: The model thinks about what it knows and what it should do next
-2. Action — Based on this reasoning, the model calls a tool or takes a step
-3. Observe — The result of that action is fed back into the context
+2. Action : Based on this reasoning, the model calls a tool or takes a step
+3. Observe : The result of that action is fed back into the context
 4. Repeat in a loop until it has enough information to produce a final answer
 
 
