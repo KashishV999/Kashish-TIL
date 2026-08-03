@@ -24,9 +24,11 @@ Now everyone can easily connect to it and if they change their API later , you d
 
 Eg:
 Every MCP server, no matter who wrote it or what system it wraps, speaks the same wire format(language):
+```
 tools/list : same request/response JSON-RPC shape
 tools/call : same request/response JSON-RPC shape
 inputSchema :  declared the same way (JSON Schema format) for every tool, on every server
+```
 
 So one day you were using AirCanada mcp server in your code , but later you decide to move to Emirates mcp server , the switch will be easy since the interface exposed to you is using same language , so you can still call tool/list or tool/call on any server
 
