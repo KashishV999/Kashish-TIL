@@ -114,7 +114,7 @@ _Note: How with each step AI is perceiving the info and deciding what it need to
 **Subagent** : Not architecturally different from an agent at all ,  it's just an agent that's been wrapped and exposed as a tool to a parent/main agent, and per the "agent as tool" pattern, and it has its own tools it needs. 
 
 
-**MCP**: A container/exposer of tools. The server itself isn't intelligent — it's just infrastructure standardizing how a set of tools gets discovered and called. One server can hold many tools. 
+**MCP**: A container/exposer of tools. The server itself isn't intelligent, it's just infrastructure standardizing how a set of tools gets discovered and called. One server can hold many tools. 
 
 
 **RAG(Retrieval Augmented Generation)** is used to give/connect LLM to new information that it does not see during its pre training phase and providing that as context to generate output grounded on that information. For example connecting to your database etc. But MCP "interacts"
