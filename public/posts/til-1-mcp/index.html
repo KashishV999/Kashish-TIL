@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>TIL #1 : Model Context Protocol (MCP) and Agents | Kashish TIL</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="description" content="This is my first post in my &ldquo;Today I Learned&rdquo; series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it.">
+    <meta name="generator" content="Hugo 0.164.0">
+    
+    
+    
+      <meta name="robots" content="noindex, nofollow">
+    
+    
+
+    <link rel="stylesheet" href="/ananke/css/main.css">
+    <script>
+  (function () {
+    "use strict";
+
+    
+    
+    function revealButtons() {
+      var buttons = document.querySelectorAll(".code-block .code-copy[hidden]");
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].hidden = false;
+      }
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", revealButtons);
+    } else {
+      revealButtons();
+    }
+
+    function flash(button) {
+      var label = button.querySelector(".code-copy-label");
+      var previous = label ? label.textContent : null;
+      button.classList.add("is-copied");
+      if (label) label.textContent = "Copied";
+      window.setTimeout(function () {
+        button.classList.remove("is-copied");
+        if (label && previous !== null) label.textContent = previous;
+      }, 2000);
+    }
+
+    function legacyCopy(text) {
+      var area = document.createElement("textarea");
+      area.value = text;
+      area.setAttribute("readonly", "");
+      area.style.position = "absolute";
+      area.style.left = "-9999px";
+      document.body.appendChild(area);
+      area.select();
+      var ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch (e) {
+        ok = false;
+      }
+      document.body.removeChild(area);
+      return ok;
+    }
+
+    function copyFrom(button) {
+      var container = button.closest(".code-block");
+      if (!container) return;
+      var pre = container.querySelector("pre");
+      if (!pre) return;
+      var source = pre.querySelector("code") || pre;
+      var text = source.innerText;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          function () { flash(button); },
+          function () { if (legacyCopy(text)) flash(button); }
+        );
+      } else if (legacyCopy(text)) {
+        flash(button);
+      }
+    }
+
+    document.addEventListener("click", function (event) {
+      var button = event.target.closest(".code-copy");
+      if (button) copyFrom(button);
+    });
+  })();
+</script>
+
+    
+      
+
+    
+
+    
+
+    
+      <link rel="canonical" href="http://localhost:1313/posts/til-1-mcp/">
+    
+
+    
+    
+    <meta property="og:url" content="http://localhost:1313/posts/til-1-mcp/">
+	<meta property="og:site_name" content="Kashish TIL">
+	<meta property="og:title" content="TIL #1 : Model Context Protocol (MCP) and Agents">
+	<meta property="og:description" content="This is my first post in my “Today I Learned” series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it.">
+	<meta property="og:locale" content="en_us">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-08-03T07:07:07+01:00">
+		<meta property="article:modified_time" content="2026-08-03T07:07:07+01:00">
+
+	<meta itemprop="name" content="TIL #1 : Model Context Protocol (MCP) and Agents">
+	<meta itemprop="description" content="This is my first post in my “Today I Learned” series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it.">
+	<meta itemprop="datePublished" content="2026-08-03T07:07:07+01:00">
+	<meta itemprop="dateModified" content="2026-08-03T07:07:07+01:00">
+	<meta itemprop="wordCount" content="1086">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:title" content="TIL #1 : Model Context Protocol (MCP) and Agents">
+	<meta name="twitter:description" content="This is my first post in my “Today I Learned” series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it.">
+
+	
+  </head><body class="ma0 avenir bg-near-white development is-page is-page page-til-1-mcp">
+   
+  
+
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l center items-center justify-between">
+    <a href="/" class="f3 fw2 hover-white white-90 dib no-underline">
+      
+        Kashish TIL
+      
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+        <ul class="pl0 mr3">
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/" title="Home page">
+              Home
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="/about/" title="About page">
+              About
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="https://github.com/KashishV999" title="GitHub page">
+              GitHub
+            </a>
+          </li>
+          
+          <li class="list f5 f4-ns fw4 dib pr3">
+            <a class="hover-white white-90 no-underline" href="https://www.linkedin.com/in/kashish-verma-b57b052a6/" title="LinkedIn page">
+              LinkedIn
+            </a>
+          </li>
+          
+        </ul>
+      
+      <div class="ananke-socials"></div>
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+<main class="pb7" role="main">
+  
+
+  <article class="page-til-1-mcp flex-l mw7 center ph3 flex-wrap justify-between">
+    <header class="mt4 w-100"><aside class="instapaper_ignoref b helvetica tracked ttu">
+    <a class="link dim" href="http://localhost:1313/posts/">Posts</a>
+  </aside><div id="sharing" class="mt3 ananke-socials"></div>
+<h1 class="f1 athelas mt3 mb1">TIL #1 : Model Context Protocol (MCP) and Agents</h1>
+      
+      
+      
+      <time class="f6 mv4 dib tracked" datetime="2026-08-03T07:07:07+01:00">August 3, 2026</time>
+      
+
+      
+      
+    </header>
+    <div class="nested-copy-line-height lh-copy serif f4 nested-links mid-gray pr4-l w-100-l"><p>This is my first post in my &ldquo;Today I Learned&rdquo; series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it.</p>
+<h2 id="before-mcp">Before MCP</h2>
+<p>if someone need to connect their LLM application to external system to interact with it , they needed to &ldquo;write&rdquo; code for every tool they need:
+Eg: If i need to read messages from slack , I need to write a tool readMessage tool using the /GET API from slack  and so on for other tools</p>
+<ul>
+<li>Now this means that everytime I create my application I need to include this code as well , and if the Provider(Slack) changes their API , then I as well need to chnage my code</li>
+<li>Also everyone writes their own code in their app so pretty inconsitent since everyone has their own way of writing the tool : Eg the shape of output returned by A code is different than B code even though both use same API for same tool</li>
+</ul>
+<h2 id="after-mcp">After MCP</h2>
+<p>MCP just standardizes this whole process, as now someone (mostly officially by Provider eg: Slack create their MCP server and put all the low level implementaion inside it and exposes the standard interface/schema to users
+Now everyone can easily connect to it and if they chnage their API later , you do not have to change your own code cause the whoever wrote it they will chnage their low level implemenation while the interface remains standard</p>
+<p>Eg:
+Every MCP server, no matter who wrote it or what system it wraps, speaks the same wire format(language):
+tools/list — same request/response JSON-RPC shape
+tools/call — same request/response JSON-RPC shape
+inputSchema — declared the same way (JSON Schema format) for every tool, on every server</p>
+<p>So one day you were using Aircanada mcp server in your code , but later you decide to move to Emirates mcp server , the swicth will be easy since the interfcae exposed to you is using same langauge , so you can still call tool/list or tool/call on any server</p>
+<h2 id="model-context-protocol">Model Context Protocol</h2>
+<p>MCP is used to connect LLM application to external systems and &ldquo;interact&rdquo; with them
+Eg: When connected to Airline mcp server , LLM aplication can not just retrieve information but also perform task like book a flight etc.</p>
+<p><strong>MCP host</strong>: This is the part where the user interacts with the LLM application and user types in eg: your claude application etc</p>
+<p><strong>MCP client</strong>: It lives inside the MCP host , each mcp client connects to one mcp server , and see what tool/s that server offers and give schema to llm and then whatever llm want to call , get that info and then call that tool by giving to server over protocol</p>
+<p><strong>MCP server</strong>: has all the available tool , and internally it has code that does the implementation but exposes the tools in a standard format and then return the output and give to client over the protocol</p>
+<p><strong>MCP protocol</strong> : How client and server talk to each other. Its an &ldquo;agreed&rdquo; upon language/grammar. It should have id , jsonrpc field etc fields, this way of they know what they want ,
+Ex: JSON-RPC call from an clien to call tool on a mcp server:</p>
+<div class="code-block">
+    <button class="code-copy" type="button" hidden aria-label="Copy code to clipboard">
+      <span class="code-copy-label" aria-hidden="true">Copy</span>
+    </button>
+    <pre tabindex="0"><code>{
+  &#34;jsonrpc&#34;: &#34;2.0&#34;,
+  &#34;method&#34;: &#34;tools/call&#34;,
+  &#34;params&#34;: {
+    &#34;name&#34;: &#34;name_of_the_tool_to_run&#34;,
+    &#34;arguments&#34;: {
+      &#34;parameter_1&#34;: &#34;value_1&#34;,
+      &#34;parameter_2&#34;: &#34;value_2&#34;
+    }
+  },
+  &#34;id&#34;: &#34;unique-request-id-123&#34;
+}</code></pre>
+  </div><p>Flow of Client and server:</p>
+<ol>
+<li>Host start up , connect to mcp server/s , one client per server</li>
+<li>Client calls tools/list , get all the available tools schema from server and passes to LLM as context</li>
+<li>User types a request , LLM decided whether it need to call a tool , if yes then give the client the tool it need to call with args</li>
+<li>Client ask the server to call the tool by pass the tools/call</li>
+<li>Server receives the message from client over prooocl , then runs the function and thne return the output schema back to client</li>
+<li>client then  passes the result back up.</li>
+</ol>
+<h2 id="tools-agents-subagents-mcp">Tools, Agents, Subagents, MCP</h2>
+<p><strong>Tool</strong>: The most basic unit : A tool does not &ldquo;decide&rdquo; anything , instead its given certain input and it&rsquo;s deterministic code that runs when called and returns a result.
+Eg: read_file tool accepts a filename and retunr the content of the file , similarly web_search tool etc</p>
+<p><strong>Agents</strong>: The decision-making &ldquo;loop&rdquo; that perceive a situation, decide what to do and take actions toward a certain &ldquo;goal&rdquo;.
+It has access to tools , make autonomous decisions, without a human manually driving each step.</p>
+<p>Agent uses <strong>ReAct</strong> pattern:
+Intead of directly finally producing the answer instead:</p>
+<ol>
+<li>Reason: The model thinks about what it knows and what it should do next</li>
+<li>Action — Based on this reasoning, the model calls a tool or takes a step</li>
+<li>Observe — The result of that action is fed back into the context</li>
+<li>Repeat in a loop until it has enough information to produce a final answer</li>
+</ol>
+<p>Example Query: What is the population density of the most populated city in a country where the most recent olympics were held ?</p>
+<div class="code-block">
+    <button class="code-copy" type="button" hidden aria-label="Copy code to clipboard">
+      <span class="code-copy-label" aria-hidden="true">Copy</span>
+    </button>
+    <pre tabindex="0"><code>AI: call the web_search_tool(&#34;In which country recent olympics were held?&#34;)
+received: France
+AI : call web_search_tool(&#34;Most populated city of France&#34;)
+received : Paris
+AI: call web_search_tool(&#34;Population m2 of Paris&#34;)
+recived: 21092846
+AI : call calculate_density_tool(area: 21092846)
+received: 144
+
+Final Answer : the population density  of Paris, France is 144</code></pre>
+  </div><p><em>Note: How with each step AI is perceiving the info and deciding what it need to do in a loop until it acheives the goal</em></p>
+<p><strong>Subagent</strong> : Not architecturally different from an agent at all ,  it&rsquo;s just an agent that&rsquo;s been wrapped and exposed as a tool to a parent/main agent, and per the &ldquo;agent as tool&rdquo; pattern, and it has its own tools it needs.</p>
+<p><strong>MCP</strong>: A container/exposer of tools. The server itself isn&rsquo;t intelligent — it&rsquo;s just infrastructure standardizing how a set of tools gets discovered and called. One server can hold many tools.</p>
+<p><strong>RAG(Retreival Augmented Generation)</strong> is used to give/connect LLM to new information that it does not see during its pre training phase and providing that as context to generate output grounded on that infornation. For example connecting to your database etc. But MCP &ldquo;interacts&rdquo;</p>
+<h2 id="blogs-i-found-useful-">Blogs I found useful :</h2>
+<ul>
+<li>
+<p>&ldquo;I think “agent” may finally have a widely enough agreed upon definition to be useful jargon now&rdquo; :  <a href="https://simonwillison.net/2025/Sep/18/agents/">https://simonwillison.net/2025/Sep/18/agents/</a></p>
+</li>
+<li>
+<p>Google cloud MCP SERVER: <a href="https://cloud.google.com/discover/what-is-model-context-protocol">https://cloud.google.com/discover/what-is-model-context-protocol</a></p>
+</li>
+<li>
+<p>JSON-RPC: <a href="https://apxml.com/courses/getting-started-model-context-protocol/chapter-1-architecture-and-fundamentals/json-rpc-message-structure">https://apxml.com/courses/getting-started-model-context-protocol/chapter-1-architecture-and-fundamentals/json-rpc-message-structure</a></p>
+</li>
+</ul><ul class="pa0">
+  
+</ul><ul class="pa0">
+  
+</ul>
+
+      
+    </div></article>
+</main><footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white white-70 dn dib-ns pv2 ph3 no-underline" href="http://localhost:1313/" >
+    &copy;  Kashish TIL 2026 
+  </a>
+    <div><div class="ananke-socials"></div>
+</div>
+  </div>
+</footer>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

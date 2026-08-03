@@ -1,0 +1,7 @@
+baseURL = 'https://example.org/'
+locale = 'en-us'
+title = 'Kashish TIL'
+theme = 'ananke'
+
+[pagination]
+pagerSize = 5
