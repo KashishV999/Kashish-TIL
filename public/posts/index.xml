@@ -15,9 +15,9 @@
 			<atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
 			<item>
 				<title>MCP Doesn&#39;t Make Your Model Smarter, It Makes It Capable</title>
-				<link>http://localhost:1313/posts/til-1-mcp/</link>
+				<link>http://localhost:1313/posts/til-1/</link>
 				<pubDate>Mon, 03 Aug 2026 07:07:07 +0100</pubDate>
-				<guid>http://localhost:1313/posts/til-1-mcp/</guid>
+				<guid>http://localhost:1313/posts/til-1/</guid>
 				<description>&lt;p&gt;This is my first post in my &amp;ldquo;Today I Learned&amp;rdquo; series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it.&lt;/p&gt;</description>
 			</item>
 	</channel>

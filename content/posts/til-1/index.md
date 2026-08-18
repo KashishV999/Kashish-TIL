@@ -4,7 +4,7 @@ date = 2026-08-03T07:07:07+01:00
 draft = false
 show_reading_time = true
 omit_header_text = true
-featured_image = "/images/mcp-server-til-1.png"
+images = ["/images/mcp-server-til-1.png"]
 +++
 
 This is my first post in my "Today I Learned" series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it.
@@ -39,7 +39,7 @@ This is the part people miss. MCP didn't make anything smarter here. It just mad
 
 ## Model Context Protocol
 
-![MCP architecture](/images/mcp-server-til-1.png)
+![MCP architecture](mcp-server.png)
 
 MCP is used to connect an LLM application to external systems and "interact" with them. It doesn't decide anything on its own, it just exposes what's possible. Eg: When connected to an airline MCP server, the LLM application can not only retrieve information but also perform tasks like booking a flight, etc. But whether it books the right flight, or books one at all, is entirely up to the model reasoning on the other end, not the MCP server.
 
