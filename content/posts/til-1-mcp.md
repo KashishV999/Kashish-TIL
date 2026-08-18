@@ -1,9 +1,10 @@
 +++
-title = 'TIL #1 : Model Context Protocol (MCP) and Agents'
+title = "MCP Doesn't Make Your Model Smarter, It Makes It Capable"
 date = 2026-08-03T07:07:07+01:00
 draft = false
 show_reading_time = true
 omit_header_text = true
+featured_image = "/images/mcp-server-til-1.png"
 +++
 
 This is my first post in my "Today I Learned" series. Words like MCP host, MCP server, protocol, agent, subagent, tool, and RAG get thrown around so easily as buzzwords. I tried to put together a simple explanation of them so that anyone can understand it.
@@ -34,10 +35,13 @@ inputSchema : declared the same way (JSON Schema format) for every tool, on ever
 
 So one day you were using the Air Canada MCP server in your code, but later you decide to move to the Emirates MCP server. The switch will be easy since the interface exposed to you uses the same language, so you can still call `tools/list` or `tools/call` on any server.
 
+This is the part people miss. MCP didn't make anything smarter here. It just made the plumbing predictable, so whoever's actually making decisions (the model) doesn't have to relearn a new interface every time it connects to a new server.
+
 ## Model Context Protocol
 
-MCP is used to connect an LLM application to external systems and "interact" with them.
-Eg: When connected to an airline MCP server, the LLM application can not only retrieve information but also perform tasks like booking a flight, etc.
+![MCP architecture](/images/mcp-server-til-1.png)
+
+MCP is used to connect an LLM application to external systems and "interact" with them. It doesn't decide anything on its own, it just exposes what's possible. Eg: When connected to an airline MCP server, the LLM application can not only retrieve information but also perform tasks like booking a flight, etc. But whether it books the right flight, or books one at all, is entirely up to the model reasoning on the other end, not the MCP server.
 
 **MCP host**: The part where the user interacts with the LLM application, where the user types things in. Eg: your Claude application, etc.
 
@@ -46,6 +50,7 @@ Eg: When connected to an airline MCP server, the LLM application can not only re
 **MCP server**: Holds all the available tools. Internally it has the code that implements them, but it exposes the tools in a standard format, then returns the output to the client over the protocol.
 
 **MCP protocol**: How the client and server talk to each other. It's an "agreed upon" language/grammar, it should have `id`, `jsonrpc`, etc. fields, so both sides know what's being asked.
+
 
 Ex: JSON-RPC call from a client to call a tool on an MCP server:
 
@@ -109,6 +114,9 @@ Final Answer: The population density of Paris, France is ~20,000/km².
 **MCP**: A container/exposer of tools. The server itself isn't intelligent, it's just infrastructure standardizing how a set of tools gets discovered and called. One server can hold many tools.
 
 **RAG (Retrieval Augmented Generation)**: Used to connect an LLM to new information it didn't see during pretraining, and provide that as context so the output is grounded in that information. Eg: connecting to your database, etc. MCP, on the other hand, "interacts."
+
+## So what actually makes a model capable?
+Not MCP. MCP just means the model doesn't have to guess how to talk to a system, since the interface is already standard. The actual capability, deciding what to do, when to do it, and whether the result makes sense, still comes entirely from the model's own reasoning. MCP just removes the friction of getting that reasoning connected to the real world.
 
 ## Blogs I found useful
 
