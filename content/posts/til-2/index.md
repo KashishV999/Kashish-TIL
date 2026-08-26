@@ -5,6 +5,8 @@ draft = false
 show_reading_time = true
 omit_header_text = true
 toc = true
+description = "Understanding vLLM and llm-d for serving LLMs inference at scale on Kubernetes"
+tags = ["vllm", "llm-d", "kubernetes", "inference"]
 images = ["llm-d-kubernetes-routing.png"]
 +++
 

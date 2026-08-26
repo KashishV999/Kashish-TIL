@@ -4,6 +4,8 @@ date = 2026-08-03T07:07:07+01:00
 draft = false
 show_reading_time = true
 omit_header_text = true
+description = "How MCP gives models access to tools and context, not raw intelligence"
+tags = ["mcp", "ai", "llm"]
 images = ["/images/mcp-server-til-1.png"]
 toc = true
 +++
