@@ -130,6 +130,14 @@ Now we have a vLLM server, but based on our use case we might need multiple inst
 
 So we need a **smart scheduler**. That's what llm-d is: a system that helps route inference requests intelligently across vLLM instances based on each instance's state (like KV cache and load), in a distributed system. and llm-d sits right on top of Kubernetes
 
+## Disaggregating the Prefill and Decode Stages
+Okay so here's another cool thing llm-d can do: split prefill and decode jobs.
+Remember prefill is compute-heavy and decode is memory-bandwidth-heavy, two totally different jobs. So instead of making one GPU do both (and constantly switching hats), why not just give each phase its own dedicated resources??
+
+That's exactly what disaggregated serving does: it decouples prefill and decode onto separate pools of GPUs, so each one can be tuned and scaled for exactly what it's good at. Prefill fleet reads and understands prompts fast, decode fleet streams tokens out smoothly.
+
+Think of it like two dedicated lanes in the pipeline, one lane just for reading prompts quickly, another lane just for streaming answers back. Each lane doing its own thing means way better responsiveness, smoother token streaming, and you get to scale each phase independently based on whatever your traffic actually needs!!
+
 
 ## Deploy : Kubernetes
 
