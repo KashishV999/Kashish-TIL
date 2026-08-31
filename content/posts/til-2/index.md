@@ -13,6 +13,10 @@ images = ["llm-d-kubernetes-routing.png"]
 Running AI infrastructure breaks a lot of the traditional ways we're used to dealing with systems. In this blog, I write about how you can serve AI models efficiently for inference on Kubernetes on hardware like GPUs (which are super expensive!!!), and how vLLM can help you manage memory efficiently while llm-d can help load balance the system smartly to your needs.
 <!--more-->
 
+> **Video explanation:** A video walkthrough of this post is available : watch on YouTube or follow along below.
+
+{{< youtube "mtyoHaIkwR4" >}}
+
 
 I put this together to explain things in a layman way, cause most AI terms sound scary when you hear them thrown around (atleast for me :)), but once I actually tried to understand them, I realized it's just the words that sound heavy. So before I get into the actual problem, let me walk you through how I built up to understanding it, piece by piece.
 
