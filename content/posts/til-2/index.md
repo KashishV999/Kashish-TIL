@@ -1,5 +1,5 @@
 +++
-title = "LLM Inference at Scale: vLLM and llm-d"
+title = "LLM Inference at Scale: vLLM and llm-d on Kubernetes"
 date = 2026-08-26
 draft = false
 show_reading_time = true
