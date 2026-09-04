@@ -1,5 +1,5 @@
 +++
-title = "Secure Agentic AI on Kubernetes : Sidecar Pattern, Gateway, LLM-as-a-Judge, GitOps"
+title = "Secure Agentic AI Deployment on Kubernetes: Sidecar Pattern, LLM-as-a-Judge, Gitops"
 date = 2026-09-03
 draft = true
 show_reading_time = true
