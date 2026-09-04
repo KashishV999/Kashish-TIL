@@ -15,6 +15,11 @@ We're in the middle of the biggest shift in how we build software. Traditionally
 But this shift has been tremendous with the coming of agentic AI that uses large language models. The old rules still apply, but they're not enough anymore, and figuring out *why* they're not enough and *how* you can fix it is basically what this blog is about.
 <!--more-->
 
+> **Video explanation:** A video walkthrough of this post is available : watch on YouTube or follow along below.
+
+{{< youtube "rbl9kCJtf4I" >}}
+
+
 ## What are agents?
 
 An agent is a system that has a decision-making "loop": it perceives a situation, decides what to do, and takes actions toward a certain goal. It has access to tools and makes autonomous decisions, without a human manually driving each step.
