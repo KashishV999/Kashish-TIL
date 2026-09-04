@@ -7,7 +7,6 @@ omit_header_text = true
 toc = true
 description: "Securing agentic AI on Kubernetes with the sidecar pattern,and LLM-as-a-judge, Gitops and walk through using the real GitHub MCP prompt injection attack."
 tags: ["kubernetes", "ai-agents", "security", "sidecar-pattern", "mcp", "prompt-injection", "gitops", "zero-trust"]
-images = [""]
 +++
 
 We're in the middle of the biggest shift in how we build software. Traditionally, software is very deterministic: whatever pre-defined instructions you write, your software behaves exactly like that. With deterministic software, it's pretty intuitive to secure it, because you mostly know the points of failure and you secure them.
