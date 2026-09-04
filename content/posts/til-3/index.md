@@ -25,6 +25,10 @@ Agents use the ReAct pattern to get there. Instead of just jumping straight to a
 - **Observe**: the result of that action gets fed back into the context
 - Repeat until it has enough information to give a final answer
 
+
+![The ReAct loop: an agent reasons, acts, and observes in a cycle until it reaches its goal](agent-react-loop.png)
+
+
 **Example:** "Book me a flight to Toronto for September 10th"
 
 ```
@@ -41,6 +45,9 @@ Because of this autonomy, we get non-deterministic behavior and that leads to a 
 In a traditional system, we kept **data** and **instructions** separate. With agents, that line blurs completely: whatever "data" the LLM pulls in can end up being used as the *next set of instructions* it reasons and acts on. Imagine someone prompt-injecting your agent into leaking all your financial data publicly, without you ever agreeing to it. This isn't hypothetical: it's already happened to a very real, very big target.
 
 ## The Real Attack: GitHub MCP Cross-Repository Data Leak (May 2025, disclosed by Invariant Labs)
+
+![The GitHub MCP attack: a compromised agent pivots from a poisoned public issue to leaking private repo data](github-mcp-attack-flow.png)
+
 
 Here's what happened the user is using an MCP client (like Claude Desktop) with the GitHub MCP server connected to their account. The user has two repositories:
 
@@ -65,9 +72,11 @@ That's exactly what we need here. So what's a sidecar?
 
 **Sidecar containers** are secondary containers that run alongside the main application container, within the same Pod. They extend the primary app's functionality (logging, monitoring, security) while sharing the same lifecycle and resources as the main container.
 
+![The sidecar pattern: a helper container running alongside the main app, reused across every app in the org](sidecar-pattern-general.png)
+
 **Why do we need one, and what goes inside it?**
 
-The main idea is separation of concerns between your infrastructure layer and your business logic. Say you have a set of security rules: you don't want to hardcode those rules inside every single app across your org. If you ever need to change the policy, you'd have to go update the code inside every app you own. Instead, the better pattern: write that logic ONCE, into a sidecar, and attach it to every app that needs it. Change the policy once, in one place, and every app that uses that sidecar picks up the change. That's how you keep **STANDARDIZATION** across your whole org.
+The main idea is "separation of concerns" between your infrastructure layer and your business logic. Say you have a set of security rules: you don't want to hardcode those rules inside every single app across your org. If you ever need to change the policy, you'd have to go update the code inside every app you own. Instead, the better pattern: Change the policy once, in one place, and every app that uses that sidecar picks up the change. That's how you keep **STANDARDIZATION** across your whole org.
 
 We use this exact pattern when deploying agents.
 
@@ -93,6 +102,8 @@ metadata:
 That's it: this creates the identity. 
 
 ### Roles & RoleBindings: attaching permissions to that identity
+
+![the Agent's ServiceAccount gives it an identity, attached to a Role that grants it specific permissions](identity-and-permissions.png)
 
 Just like a human account can have a certain level of permission, you attach permission levels to this ServiceAccount too. Example: this account is allowed to read a specific secret, like a GitHub token or a bank-account API token, nothing more.
 
@@ -139,6 +150,7 @@ Now the agent just talks to its sidecar over `localhost`, and the sidecar handle
 
 ### Putting it together: the request flow
 
+![Request flow: the agent calls its sidecar over localhost, which exchanges a refresh token from Vault for a short-lived access token before calling the real tool](request-flow-token-exchange.png)
 
 
 ## What Happens on Prompt Injection? LLM-as-a-Judge
