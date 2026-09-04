@@ -148,7 +148,10 @@ Here's the next problem: everything above protects against "is this agent ALLOWE
 This is where we can add one more job to the sidecar: before letting a tool's response reach the agent, run it through a small LLM whose only job is to judge: *"does this content look like it's trying to inject new instructions into an agent?"*
 
 
-This is called LLM-as-a-judge pattern where you use one LLM to judge another LLM answer. If you want to learn more about it I put together a video of it as well , check it out [YOUTUBE]
+This is called LLM-as-a-judge pattern where you use one LLM to judge another LLM answer. If you want to learn more about it I put together a video of it as well , check it out : 
+
+{{< youtube "D99MpUbiUF0" >}}
+
 
 ## GitOps: Making This Organization-Wide
 
@@ -159,3 +162,8 @@ Also, if someone's manually running `kubectl apply` every time, there's no obser
 **GitOps** is the fix: instead of developers manually running `kubectl apply` themselves, they just write a description of what they want (the YAML files above) and commit it to a Git repository. A separate automated controller (tools like ArgoCD or Flux) constantly watches that repo, compares it against what's actually running in the cluster, and automatically applies any differences, and just as importantly, automatically reverts anything that was changed by hand outside of Git.
 
 The result: there's no path to deploy an insecure agent by accident, because there's no path to deploy ANYTHING except through this one reviewed, automated pipeline. Security stops being something developers have to remember, and becomes something the platform enforces by default.
+
+If you are unfamiliar with GitOps, I made a video walkthrough on YouTube: {{< youtube "t5F_hCYl_zA" >}}
+
+
+_If you read till the end , thank you so much, I hope this can help you to understand and explore more on these topic, byeee!!!_
