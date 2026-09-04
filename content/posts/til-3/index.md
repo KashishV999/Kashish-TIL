@@ -68,30 +68,14 @@ That's where the naive request goes sideways. The agent goes through the list of
 
 With this much autonomy handed to agents, the *data itself* becomes the attack surface. If it can happen to a company the size of GitHub's user base, it can absolutely happen to your agent too.
 
-## The Sidecar Pattern
+
+## The Principle of Least Privilege
 
 So how do we actually build infrastructure that's dynamic and resilient enough for this new kind of workload?
 
 We go back to fundamentals. The needs are changing, but the underlying concepts stay the same, just with a different flavor. One of those fundamentals: **the principle of least privilege**, giving users, programs and systems only the bare minimum permissions they need to do their job and nothing more.
 
-That's exactly what we need here. So what's a sidecar?
-
-**Sidecar containers** are secondary containers that run alongside the main application container, within the same Pod. They extend the primary app's functionality (logging, monitoring, security) while sharing the same lifecycle and resources as the main container.
-
-![The sidecar pattern: a helper container running alongside the main app, reused across every app in the org](sidecar-pattern-general.png)
-
-**Why do we need one, and what goes inside it?**
-
-The main idea is "separation of concerns" between your infrastructure layer and your business logic. Say you have a set of security rules: you don't want to hardcode those rules inside every single app across your org. If you ever need to change the policy, you'd have to go update the code inside every app you own. Instead, the better pattern: Change the policy once, in one place, and every app that uses that sidecar picks up the change. That's how you keep **STANDARDIZATION** across your whole org.
-
-We use this exact pattern when deploying agents.
-
-Here's the thing: 
-1. Secret mamagement: your agent needs to interact with the real world by making tool calls, say, a `read_repo` tool call against a GitHub MCP server. You do NOT want to hand your agent's own code the raw secrets to do that. Imagine the agent gets manipulated (see: the GitHub attack above); now it has direct access to everything, and nothing is standing in the way.
-
-2. Roles and permissions: And in a multi-agent system, you don't want to give every agent access to every tool. Your finance agent might only need `read_balance`; your GitHub agent has zero business touching that tool at all. Giving everyone access to everything just doesn't make sense.
-
-That's exactly where the sidecar comes in. But before we get into how it works, let's define a few building blocks.
+That's exactly what we need here.
 
 ### Service Account: giving your agent an identity
 
@@ -105,7 +89,7 @@ metadata:
   namespace: ai-agents
 ```
 
-That's it: this creates the identity. 
+That's it: this creates the identity.
 
 ### Roles & RoleBindings: attaching permissions to that identity
 
@@ -126,9 +110,36 @@ rules:
     verbs: ["get"]
 ```
 
-One important nuance: this is Kubernetes-level permission. It controls what the *sidecar* can touch inside the Kubernetes API (like reading one specific Secret object). It says nothing about which business-level tools (like `read_balance` vs `make_payment`) the agent itself is allowed to call. That's a separate concern, which brings us to the next building block.
+One important nuance: this is Kubernetes-level permission. It controls what the *sidecar* can touch inside the Kubernetes API (like reading one specific Secret object). It says nothing about which business-level tools (like `read_balance` vs `make_payment`) the agent itself is allowed to call. That's a separate concern, covered below.
 
-### Custom CRD: teaching Kubernetes about tool-level permissions
+## The Sidecar Pattern
+
+So what's a sidecar?
+
+**Sidecar containers** are secondary containers that run alongside the main application container, within the same Pod. They extend the primary app's functionality (logging, monitoring, security) while sharing the same lifecycle and resources as the main container.
+
+![The sidecar pattern: a helper container running alongside the main app, reused across every app in the org](sidecar-pattern-general.png)
+
+**Why do we need one, and what goes inside it?**
+
+The main idea is "separation of concerns" between your infrastructure layer and your business logic. Say you have a set of security rules: you don't want to hardcode those rules inside every single app across your org. If you ever need to change the policy, you'd have to go update the code inside every app you own. Instead, the better pattern: Change the policy once, in one place, and every app that uses that sidecar picks up the change. That's how you keep **STANDARDIZATION** across your whole org.
+
+We use this exact pattern when deploying agents.
+
+Here's the thing:
+**Secret management**: your agent needs to interact with the real world by making tool calls, say, a `read_repo` tool call against a GitHub MCP server. You do NOT want to hand your agent's own code the raw secrets to do that. Imagine the agent gets manipulated (see: the GitHub attack above); now it has direct access to everything, and nothing is standing in the way.
+
+That's exactly where the sidecar comes in.
+
+## Secret Management: short-lived tokens, not permanent passwords
+
+Now to actually make those tool calls, you need a token. So never give your agent access to a token directly. Instead, the sidecar holds that responsibility.
+
+Inside the sidecar itself: it fetches long-lived credentials from a secrets manager (like HashiCorp Vault) and instead of using that long-lived secret directly, it trades it for a **short-lived access token**. That short-lived token is what actually gets used to call the real tool and bring the result back.
+
+Now the agent just talks to its sidecar over `localhost`, and the sidecar handles everything behind the scenes.
+
+## Custom CRD: teaching Kubernetes about tool-level permissions
 
 Kubernetes RBAC has zero concept of "tools" like `read_balance` or `make_payment`; those are business concepts we invented, meaningless to Kubernetes by default. So we define our own **Custom Resource Definition (CRD)** that teaches Kubernetes a new object type, call it `ToolPermission`, so we can declare, per agent, exactly which tools it's allowed to call.
 
@@ -146,13 +157,7 @@ spec:
     - read_balance
 ```
 
-### Secret Management: short-lived tokens, not permanent passwords
 
-Now to actually make those tool calls, you need a token. So never give your agent access to a token directly. Instead, the sidecar holds that responsibility.
-
-Now, inside the sidecar itself: it fetches long-lived credentials from a secrets manager (like HashiCorp Vault) and instead of using that long-lived secret directly, it trades it for a **short-lived access token**. That short-lived token is what actually gets used to call the real tool and bring the result back.
-
-Now the agent just talks to its sidecar over `localhost`, and the sidecar handles everything behind the scenes.
 
 ### Putting it together: the request flow
 
