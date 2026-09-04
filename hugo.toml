@@ -1,4 +1,4 @@
-baseURL = 'https://kashishverma.com'
+baseURL = 'https://serene-llama-209254.netlify.app/'
 locale = 'en-us'
 title = 'Kashish Blog'
 theme = 'ananke'
