@@ -11,7 +11,7 @@ images = ["a2a-protocol.png"]
 +++
 
 
-Thisblog is about A2A (Agent2Agent) protocol: why it exists, how it actually works under the hood and a full walkthrough of building your own multi-agent system by leveraging other people's agents. I'll be using a recipe-finder multi-agent example the whole way through, and you can grab the full code here: [repo link].
+This blog is about A2A (Agent2Agent) protocol: why it exists, how it actually works under the hood and a full walkthrough of building your own multi-agent system by leveraging other people's agents. I'll be using a recipe-finder multi-agent example the whole way through, and sharing the code for it at the end, so you can follow along and build your own multi-agent system too.
 
 <!--more-->
 
