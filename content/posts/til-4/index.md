@@ -31,6 +31,10 @@ I know "standardization" sounds a little abstract, so let's actually get into wh
 
 Note : You can see here how our agent want to talk to these 3 agents but unable to talk to them because you don't know what they do , how to send them a message and how to get a response back.
 
+> **Video explanation:** A video walkthrough of this post is available : watch on YouTube or follow along below.
+
+{{< youtube "3yCmgYiXit4" >}}
+
 ## How A2A actually standardizes things ?
 
 Now A2A solves all of these questions by standardizing three things: discovery, message format, and execution. Let's go through each one.
