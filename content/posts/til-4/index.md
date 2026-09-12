@@ -11,7 +11,7 @@ images = ["end-to-end-flow.png"]
 +++
 
 
-This blog is about A2A (Agent2Agent) protocol: why it exists, how it actually works under the hood and a full walkthrough of building your own multi-agent system by leveraging other people's agents. I'll be using a recipe-finder multi-agent example the whole way through, and sharing the code for it at the end, so you can follow along and build your own multi-agent system too.
+This blog is about A2A (Agent2Agent) protocol: why it exists, how it actually works and a full walkthrough of building your own multi-agent system by leveraging other people's agents. I'll be using a recipe-finder multi-agent example the whole way through, and sharing the code for it at the end, so you can follow along and build your own multi-agent system too.
 
 <!--more-->
 
@@ -63,7 +63,6 @@ So A2A wraps the agent in an **AgentExecutor**. Whatever your agent's real funct
 ![agent-executor](agent-executor.png)
 *AgentExecutor wraps the agent: outside, it's just `execute()` and `cancel()`.*
 
-![with-a2a-protocol](with-a2a-protocol.png)
 
 ## Putting it all together: the end-to-end flow
 
@@ -80,6 +79,8 @@ So here's the whole flow,
 
 ![end-to-end-flow](end-to-end-flow.png)
 *The full flow: discovery, then message exchange, then execution.*
+
+![with-a2a-protocol](with-a2a-protocol.png)
 
 ## Building a multi-agent example
 
