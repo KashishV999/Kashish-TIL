@@ -1,7 +1,7 @@
 +++
 title = "A2A (Agent-to-Agent) Protocol"
 date = 2026-09-11
-draft = true
+draft = false
 show_reading_time = true
 omit_header_text = true
 toc = true
