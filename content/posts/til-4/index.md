@@ -7,7 +7,7 @@ omit_header_text = true
 toc = true
 description = "Understanding the A2A (Agent-to-Agent) Protocol"
 tags = ["a2a", "protocol", "agents"]
-images = ["a2a-protocol.png"]
+images = ["end-to-end-flow.png"]
 +++
 
 
